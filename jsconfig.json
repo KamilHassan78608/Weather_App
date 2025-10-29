@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    // This line tells your editor to treat JSX as React components
+    "jsx": "react-jsx" 
+  },
+  // This tells the editor to apply these rules to all files in your src folder
+  "include": ["src/**/*"]
+}

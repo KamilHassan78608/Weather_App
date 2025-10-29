@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Weather Dashboard</title>
+    
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom class for the glassmorphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 to-blue-700 min-h-screen flex items-center justify-center p-4 text-white">
+
+    <!-- Main Dashboard Container -->
+    <div class="w-full max-w-5xl glass-card rounded-2xl shadow-2xl p-6 sm:p-8">
+
+        <!-- Header: Search Bar -->
+        <header class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+            <h1 class="text-2xl font-bold">Pro Weather Dashboard</h1>
+            <div class="flex w-full sm:w-auto">
+                <input type="text" id="city-input" placeholder="Enter city name..." class="w-full sm:w-64 px-4 py-2 rounded-l-lg bg-white/10 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 border-none text-white">
+                <button id="search-button" class="bg-blue-500 hover:bg-blue-400 px-4 py-2 rounded-r-lg font-semibold transition-colors">
+                    <!-- Search Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Message Box (for errors, loading, etc.) -->
+        <div id="message-box" class="hidden p-4 rounded-lg text-center font-medium mb-6"></div>
+
+        <!-- Welcome Message (shown on load) -->
+        <div id="welcome-message" class="text-center py-16">
+            <h2 class="text-3xl font-semibold mb-2">Welcome</h2>
+            <p class="text-lg text-white/80">Please search for a city to view the live weather dashboard.</p>
+        </div>
+
+        <!-- Main Weather Display (hidden by default) -->
+        <main id="weather-display" class="hidden">
+            
+            <!-- Section 1: Main Conditions -->
+            <section class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                <!-- Left Side: Temp, City, Desc -->
+                <div class="flex-1 text-center md:text-left">
+                    <h2 id="city-name" class="text-4xl font-bold">--</h2>
+                    <p id="description" class="text-xl text-white/80 capitalize">--</p>
+                    <div id="temperature" class="text-7xl sm:text-8xl font-bold my-2">--°C</div>
+                    <p id="feels-like" class="font-medium text-lg">Feels like --°C</p>
+                </div>
+                <!-- Right Side: Icon -->
+                <div class="flex-shrink-0">
+                    <img id="weather-icon" src="https://placehold.co/150x150/ffffff/333333?text=ICON" alt="Weather icon" class="w-32 h-32 sm:w-40 sm:h-40">
+                </div>
+            </section>
+
+            <!-- Section 2: Detailed Grid -->
+            <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                
+                <!-- Detail Card: Humidity -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Droplet -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                        <span class="font-semibold">Humidity</span>
+                    </div>
+                    <div id="humidity" class="text-3xl font-bold">--%</div>
+                </div>
+
+                <!-- Detail Card: Wind Speed -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Wind -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>
+                        <span class="font-semibold">Wind Speed</span>
+                    </div>
+                    <div id="wind-speed" class="text-3xl font-bold">-- m/s</div>
+                </div>
+
+                <!-- Detail Card: Pressure -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Gauge -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12m-10 0a10 10 0 1 0 20 0a10 10 0 1 0 -20 0"></path><path d="M12 12l0 -5"></path><path d="M12 12l-3.5 0"></path></svg>
+                        <span class="font-semibold">Pressure</span>
+                    </div>
+                    <div id="pressure" class="text-3xl font-bold">-- hPa</div>
+                </div>
+
+                <!-- Detail Card: Visibility -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Eye -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <span class="font-semibold">Visibility</span>
+                    </div>
+                    <div id="visibility" class="text-3xl font-bold">-- km</div>
+                </div>
+
+                <!-- Detail Card: Min Temp -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Thermometer Down -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h-4v12a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V4m0 0a2 2 0 1 0-4 0"></path><path d="M4 12V4a2 2 0 0 1 4 0"></path><path d="m10 12-6 6"></path></svg>
+                        <span class="font-semibold">Min Temp</span>
+                    </div>
+                    <div id="temp-min" class="text-3xl font-bold">--°C</div>
+                </div>
+
+                <!-- Detail Card: Max Temp -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Thermometer Up -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h-4v12a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V4m0 0a2 2 0 1 0-4 0"></path><path d="M4 12V4a2 2 0 0 1 4 0"></path><path d="m4 18 6-6"></path></svg>
+                        <span class="font-semibold">Max Temp</span>
+                    </div>
+                    <div id="temp-max" class="text-3xl font-bold">--°C</div>
+                </div>
+
+                <!-- Detail Card: Sunrise -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Sunrise -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"></path><path d="m4.93 10.93 1.41 1.41"></path><path d="M2 18h20"></path><path d="M20.49 10.93l-1.41 1.41"></path><path d="M12 18V6a4 4 0 0 1 8 0v12"></path><path d="M8 18V6a4 4 0 0 0-8 0v12"></path></svg>
+                        <span class="font-semibold">Sunrise</span>
+                    </div>
+                    <div id="sunrise" class="text-3xl font-bold">--:--</div>
+                </div>
+
+                <!-- Detail Card: Sunset -->
+                <div class="glass-card p-4 rounded-lg flex flex-col items-center sm:items-start">
+                    <div class="flex items-center gap-2 text-white/80 mb-1">
+                        <!-- Icon: Sunset -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10V2"></path><path d="m4.93 10.93 1.41 1.41"></path><path d="M2 18h20"></path><path d="M20.49 10.93l-1.41 1.41"></path><path d="M12 22V14a4 4 0 0 0-8 0v4"></path><path d="M20 14a4 4 0 0 0-8 0v4"></path></svg>
+                        <span class="font-semibold">Sunset</span>
+                    </div>
+                    <div id="sunset" class="text-3xl font-bold">--:--</div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- 4. JavaScript Logic -->
+    <script>
+        // --- CONFIGURATION ---
+        // !! IMPORTANT: Replace with your own OpenWeatherMap API key !!
+        const API_KEY = "9923acc08c7c027d6e965eb28da9f12d"; 
+        // ---------------------
+
+        // Get references to all the DOM elements
+        const cityInput = document.getElementById('city-input');
+        const searchButton = document.getElementById('search-button');
+        const messageBox = document.getElementById('message-box');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const weatherDisplay = document.getElementById('weather-display');
+
+        // Main data fields
+        const cityName = document.getElementById('city-name');
+        const weatherIcon = document.getElementById('weather-icon');
+        const temperature = document.getElementById('temperature');
+        const description = document.getElementById('description');
+        const feelsLike = document.getElementById('feels-like');
+
+        // Detail grid fields
+        const humidity = document.getElementById('humidity');
+        const windSpeed = document.getElementById('wind-speed');
+        const pressure = document.getElementById('pressure');
+        const visibility = document.getElementById('visibility');
+        const tempMin = document.getElementById('temp-min');
+        const tempMax = document.getElementById('temp-max');
+        const sunrise = document.getElementById('sunrise');
+        const sunset = document.getElementById('sunset');
+
+        // Add event listener for the search button
+        searchButton.addEventListener('click', fetchWeather);
+        // Add event listener for pressing 'Enter' in the input
+        cityInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                fetchWeather();
+            }
+        });
+
+        // Function to show messages (error, loading, success)
+        function showMessage(message, type = 'loading') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-500', 'bg-blue-500', 'bg-yellow-500');
+
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-500');
+            } else if (type === 'loading') {
+                messageBox.classList.add('bg-blue-500');
+            } else if (type === 'warn') {
+                 messageBox.classList.add('bg-yellow-500', 'text-black');
+            }
+            messageBox.classList.remove('hidden');
+        }
+
+        // Function to hide the message box
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
+
+        // Main function to fetch weather data
+        async function fetchWeather() {
+            const city = cityInput.value;
+
+            // --- Validation ---
+            if (API_KEY === "YOUR_API_KEY_HERE" || !API_KEY) {
+                showMessage("Please add your OpenWeatherMap API key to the script.", 'warn');
+                return;
+            }
+            if (!city) {
+                showMessage("Please enter a city name.", 'error');
+                return;
+            }
+
+            // --- Start Loading ---
+            showMessage("Fetching weather data...", 'loading');
+            welcomeMessage.classList.add('hidden');
+            weatherDisplay.classList.add('hidden');
+
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+            try {
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error(`City not found: "${city}"`);
+                    } else if (response.status === 401) {
+                        throw new Error("Invalid API Key. Please check your key in the script.");
+                    } else {
+                        throw new Error(`Error: ${response.statusText}`);
+                    }
+                }
+
+                const data = await response.json();
+                
+                // --- Success ---
+                hideMessage();
+                displayWeather(data);
+
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // Function to update the DOM with new weather data
+        function displayWeather(data) {
+            // Main info
+            cityName.textContent = `${data.name}, ${data.sys.country}`;
+            temperature.textContent = `${Math.round(data.main.temp)}°C`;
+            description.textContent = data.weather[0].description;
+            feelsLike.textContent = `Feels like ${Math.round(data.main.feels_like)}°C`;
+            weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`;
+            weatherIcon.alt = data.weather[0].description;
+
+            // Detail grid
+            humidity.textContent = `${data.main.humidity}%`;
+            windSpeed.textContent = `${data.wind.speed.toFixed(1)} m/s`;
+            pressure.textContent = `${data.main.pressure} hPa`;
+            visibility.textContent = `${(data.visibility / 1000).toFixed(1)} km`;
+            tempMin.textContent = `${Math.round(data.main.temp_min)}°C`;
+            tempMax.textContent = `${Math.round(data.main.temp_max)}°C`;
+            
+            // Format sunrise/sunset times
+            sunrise.textContent = formatTime(data.sys.sunrise, data.timezone);
+            sunset.textContent = formatTime(data.sys.sunset, data.timezone);
+
+            // Show the weather display
+            weatherDisplay.classList.remove('hidden');
+        }
+
+        // Helper function to format UNIX timestamps to local time
+        function formatTime(unixTimestamp, timezoneOffset) {
+            // Convert to milliseconds and adjust for timezone offset
+            const date = new Date((unixTimestamp + timezoneOffset) * 1000);
+            // Get UTC hours and minutes
+            const hours = date.getUTCHours().toString().padStart(2, '0');
+            const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+    </script>
+
+</body>
+</html>

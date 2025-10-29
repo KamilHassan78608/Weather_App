@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    // This is your path mapping configuration
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    
+    // This is the line you add to support React's JSX syntax
+    "jsx": "react-jsx"
+  },
+  // This tells the editor to only look inside your src folder
+  "include": ["src/**/*"]
+}
+
