@@ -152,10 +152,34 @@
 
 @layer components {
   .weather-title {
-    @apply text-8xl md:text-8xl font-bold mb-4 tracking-tight bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent;
+    @apply text-4xl md:text-7xl font-bold mt-2 tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent;
   }
 
   .weather-subtitle {
-    @apply text-lg md:text-2xl text-gray-400 opacity-90 bg-gradient-to-r from-sky-200 to-white bg-clip-text text-transparent;
+    @apply text-sm mt-0 md:text-2xl text-gray-400 opacity-90 bg-gradient-to-r from-slate-200 to-white bg-clip-text text-transparent;
+  }
+.card-background {
+  @apply p-6 md:p-12 lg:p-20 rounded-2xl mt-10 md:mt-20 border-2 
+  backdrop-blur-md border-sky-200/40 bg-white/10 shadow-xl;
+}
+
+/* Small Box Styling */
+.box-background {
+  @apply p-4 md:p-6 rounded-2xl backdrop-blur-lg 
+  border border-slate-300/40 flex flex-col items-center justify-center;
+}
+
+/* Text Styling */
+.box-subtitle {
+  @apply text-xs sm:text-sm md:text-lg text-gray-300 opacity-90 
+  bg-gradient-to-r from-slate-400 to-white bg-clip-text text-transparent;
+}
+
+.box-title {
+  @apply text-base sm:text-lg md:text-xl font-bold text-white;
+}
+
+  .box-title{
+    @apply text-sm md:text-6xl  text-gray-400 opacity-90 bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent;
   }
 }
