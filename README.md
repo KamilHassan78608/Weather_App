@@ -1,16 +1,45 @@
-# React + Vite
+# Weather App 🌤️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive weather-forecast web application built with React and Vite.  
+It pulls live weather data from an external API and visualizes current conditions and forecasts for any city worldwide.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Search for any city and instantly retrieve the current weather and short-term forecast  
+- Clean and intuitive UI built with React, styled with CSS  
+- Responsive layout works well on desktop and mobile  
+- Easy to extend: add extra metrics (humidity, wind speed, UV index), integrate maps, etc.  
+- Built with Vite for fast development and optimized build performance  
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React (JavaScript)  
+- Vite build tool  
+- Tialwind CSS for styling  
+- External weather data API (e.g., OpenWeatherMap or similar)  
+- GitHub repository for version control and collaboration  
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites  
+- Node.js (>= v16)  
+- npm or yarn  
+
+### Installation  
+```bash
+# Clone this repository  
+git clone https://github.com/KamilHassan78608/Weather_App.git  
+cd Weather_App  
+
+# Install dependencies  
+npm install  
+# or  
+yarn  
+
+# Create a `.env` file and add your weather-API key:  
+REACT_APP_WEATHER_API_KEY=your_api_key_here  
+
+# Start in development mode  
+npm run dev  
+# or  
+yarn dev  
